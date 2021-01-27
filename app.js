@@ -13,6 +13,7 @@ var sockets = [];
 var room_id = "";
 var nickname = "";
 var isRoomFull = false;
+var nameAndRoom = [];
 
 //MiddleWares
 app.use(express.static("public"))
@@ -79,12 +80,14 @@ app.get("/:room_id-:name",(req,res)=>{
 });
 
 io.on("connection",socket=>{
+    var names = [];
     var memberCount = 0;
     socket.join(room_id);
-    roomAndMembers.push({room_id:room_id,id:socket.id});
+    roomAndMembers.push({room_id:room_id,id:socket.id,name:nickname});
     roomAndMembers.forEach(roomAndMember=>{
         if(roomAndMember.room_id === room_id){
             memberCount++;
+            names.push(roomAndMember.name)
         }
     })
     if(memberCount === 3){
@@ -94,7 +97,7 @@ io.on("connection",socket=>{
     if(memberCount>3){
         console.log("room full")
     }else{
-        io.to(room_id).emit("new member",{name:nickname,memberCount:memberCount})
+        io.to(room_id).emit("new member",{names:names,memberCount:memberCount})
     }
     console.log(roomAndMembers);
     console.log(memberCount);
