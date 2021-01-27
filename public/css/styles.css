@@ -1,0 +1,66 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body{
+  background-color: #6cdbeb 
+}
+.race-track{
+  position: relative;
+  width: 200vh;
+  height: 200px;
+  background-color:rgb(255, 255, 255,.15);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  margin: auto;
+  margin-top: 10px;
+  border-radius: 6px;
+}
+.race-car{
+  position: absolute;
+  width:100px;
+  height: 100px;
+}
+.car{
+  width:100px;
+  height: 100px;
+  display: block;
+  position: absolute;
+}
+#car1{
+  top: 0px;
+}
+#car2{
+  top: 100px;
+}
+#car3{
+  top: 200px;
+}
+.parah{
+  width: 700px;
+  margin: auto;
+  margin-top: 30px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  font-size:2rem;
+  background-color:rgb(255, 255, 255,.15);
+  backdrop-filter: blur(5px);
+  padding: 10px;
+  border-radius: 3px;
+}
+.done{
+  background-color: aquamarine;
+}
+.wrong{
+  color:red;
+}
+.typing{
+  background-color: antiquewhite;
+  border-radius: 3px;
+}
