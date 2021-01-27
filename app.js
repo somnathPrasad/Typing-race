@@ -1,9 +1,11 @@
 const express = require("express");
 const ejs = require("ejs");
 const bodyParser = require("body-parser");
+const { platform } = require("os");
 const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http)
+const parah = require(__dirname+"/RandomParah.ejs");
 
 //variables
 const roomAndMembers= []; //stores key value paires of room_id and socket_id
@@ -14,6 +16,8 @@ var room_id = "";
 var nickname = "";
 var isRoomFull = false;
 var nameAndRoom = [];
+var palyerCount = 1;
+
 
 //MiddleWares
 app.use(express.static("public"))
@@ -22,6 +26,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 app.get("/",(req,res)=>{
     res.render("home")
+    // console.log(parah.getParah());
 });
 
 app.post("/",(req,res)=>{
@@ -83,42 +88,54 @@ io.on("connection",socket=>{
     var names = [];
     var memberCount = 0;
     socket.join(room_id);
-    roomAndMembers.push({room_id:room_id,id:socket.id,name:nickname});
+    roomAndMembers.push({room_id:room_id,id:socket.id,name:nickname,palyerCount:palyerCount});
+    palyerCount++;
     roomAndMembers.forEach(roomAndMember=>{
         if(roomAndMember.room_id === room_id){
             memberCount++;
+            if(memberCount === 3){
+                io.to(room_id).emit("parah",parah.getParah());
+            }
             names.push(roomAndMember.name)
         }
     })
     if(memberCount === 3){
         isRoomFull = true;
-        console.log("room full");
     }
     if(memberCount>3){
         console.log("room full")
     }else{
-        io.to(room_id).emit("new member",{names:names,memberCount:memberCount})
+        io.to(room_id).emit("new member",{
+            names:names,
+            memberCount:memberCount,
+        })
     }
     console.log(roomAndMembers);
     console.log(memberCount);
     memberCount=0;
 })
+var car1Pos=0;
+var car2Pos=0;
+var car3Pos=0;
+io.on("connection",(socket)=>{
+    socket.on("car1 position",(position)=>{
+         car1Pos=position;
+        console.log("Position of car1: "+position);
+        io.to(room_id).emit("allCarsPos",[car2Pos,car3Pos]);
+    });
+    socket.on("car2 position",(position)=>{
+         car2Pos=position;
+        console.log("Position of car2: "+position);
+        io.to(room_id).emit("allCarsPos",[car1Pos,car3Pos]);
+    });
+    socket.on("car3 position",(position)=>{
+         car3Pos=position;
+        console.log("Position of car3: "+position);
+        io.to(room_id).emit("allCarsPos",[car1Pos,car2Pos]);
+    });
+})
 
 
-
-// io.on('connection', socket => {
-// socket.nickname = req.params.name;
-// socket.join(room_id);
-
-// roomAndMembers.push({roomId:room_id,id:socket.id});
-
-// console.log(roomAndMembers)
-
-// io.to(room_id).emit("new racer",{name:socket.nickname,members:roomCount})
-// roomCount=0;
-// console.log(room_id+" "+socket.nickname)
-// });
-    
 http.listen(3000,()=>{
     console.log("server started on port 3000")
 })
