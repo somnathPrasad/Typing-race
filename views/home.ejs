@@ -3,24 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
     <title>Typing Race</title>
 </head>
-<body>
-    <form action="/" method="POST">
-        <input type="text" name="id" id="" placeholder="room name">
-        <input type="text" name="username" id="" placeholder="enter name">
-        <input type="submit" name="createRoom" value="Create Room" id="">
-        <input type="submit" name="joinRoom" value="Join Room" id="">
-    </form>
+<body style="background-image: url(/images/background.jpg);">
+        <div class="container">
+            <p id="msg"><%= msg %></p>
+            <form action="/" method="POST">
 
+                <input class="room-id" type="text" name="id" id="room" placeholder="Room Name"/>
 
+                <input class="name-box" type="text" name="username" id="name" placeholder="Your Name"/>
 
+                <input type="submit" class="room-button" name="createRoom" value="Create Room" id="createBtn">
 
+                <input type="submit" class="room-button" name="joinRoom" value="Join Room" id="joinBtn">
 
+            </form>
+        </div>
 
-    <!-- <script src="/socket.io/socket.io.js"></script>
-    <script>
-        var socket = io();
-    </script> -->
+        <script src="js/home.js"></script>
+        <!-- <script>
+            var socket = io();
+            socket.on("room not found",(msg)=>{
+                var msgElm = document.getElementById("msg");
+                msgElm.innerHTML = msg;
+            })
+        </script> -->
 </body>
 </html>

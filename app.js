@@ -1,141 +1,144 @@
 const express = require("express");
+const app = express();
 const ejs = require("ejs");
 const bodyParser = require("body-parser");
-const { platform } = require("os");
-const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http)
-const parah = require(__dirname+"/RandomParah.ejs");
-
-//variables
-const roomAndMembers= []; //stores key value paires of room_id and socket_id
-var room_ids=[];
-var joinOrCreate = "";
-var sockets = [];
-var room_id = "";
-var nickname = "";
-var isRoomFull = false;
-var nameAndRoom = [];
-var palyerCount = 1;
+const mongoose = require("mongoose");
 
 
-//MiddleWares
 app.use(express.static("public"))
 app.set("view engine","ejs")
 app.use(bodyParser.urlencoded({extended:true}));
 
+mongoose.connect("mongodb+srv://admin-somnath:hn8qM0QtxRoeZlkN@cluster0.vc3ep.mongodb.net/typingPracticeDB?retryWrites=true&w=majority", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex:true
+});
+
+
+//Mongoose Schemas
+const roomSchema = new mongoose.Schema({
+    room_id:String,
+    members:[{
+        member:String,
+        memberCount:Number
+    }]
+});
+
+const memberSchema = new mongoose.Schema({
+    member:String,
+    memberCount:Number
+})
+
+const Room = new mongoose.model("Room",roomSchema);
+const Member = new mongoose.model("Member",memberSchema)
+
+
 app.get("/",(req,res)=>{
-    res.render("home")
-    // console.log(parah.getParah());
+    res.render("home",{msg:""})
 });
 
 app.post("/",(req,res)=>{
-    var count = 0;
+    //check that no input fields are blank
 
-    if(req.body.createRoom==="Create Room" && room_ids.length===0){
-        joinOrCreate = req.body.createRoom;
-        room_ids.push(req.body.id);
-        res.redirect("/"+req.body.id+"-"+req.body.username);
-    }else if(req.body.createRoom==="Create Room" && room_ids.length!==0){
+    const room_id = req.body.id;
+    const name = req.body.username;
 
-        for(var x=0;x<room_ids.length;x++){
-            if(room_ids[x] === req.body.id){
-                count++;
-                //if room id typed matches with room id stored count         increases so that i can see if there is a room with that id
-            }
-        }
-        if(count>=1){
-            //if count is greater than 0 
-            //that means room with id that is typed is already present
-            console.log("room already present")
-            res.redirect("/");
-        }else{
-            room_ids.push(req.body.id);
-            res.redirect("/"+req.body.id+"-"+req.body.username);
-        }
-    }else if(req.body.joinRoom==="Join Room"){
-        for(var x=0;x<room_ids.length;x++){
-            if(room_ids[x] === req.body.id){
-                count++;
-                //if room id typed matches with room id stored count         increases so that i can see if there is a room with that id
-            }
-        }
-        if(count>=1){
-            //if count is greater than 0 
-            //that means room with id that is typed is already present
-            res.redirect("/"+req.body.id+"-"+req.body.username);
-        }else{
-            console.log("room not present")
-            res.redirect("/");
-        }
-    }
+    if (room_id===""||name==="") {
+        res.render("home",{msg:"Please fill everything"});  
+    } else {
+        if(req.body.createRoom === undefined){
+            //player wants to join a room
+            
+            Room.findOne({room_id:room_id},function(err,foundRoom){
+            if(err){
+                console.log(err)
+            }else{
+                if(foundRoom === null){
+                    //room not found, show msg on screen
+                    res.render("home",{msg:"No such room is active"});
+                }else{
+                    // 1. room found
+                    // 2. check the name typed is registered on the collection of that room
     
+                    var count = 0;//to count no of members present in that room
+    
+                    Room.findOne({room_id:room_id},{'members': {$elemMatch: {member: name}}}, function(err, foundMember) {
+                        if (err) {
+                            console.log(err);
+                        }else{
+                            if(foundMember.members[0]===undefined){
+                                //player not found
+                                //push player name to db
+                                //then redirect it to index page
+    
+                                //counting the no of members already present and push new member
+                                Room.findOne({room_id:room_id},function(err,foundRoom){
+                                    if(err){
+                                        console.log(err);
+                                    }else{
+                                        console.log("1");
+                                        console.log(foundRoom)
+                                        foundRoom.members.forEach(member=>{
+                                            count = member.memberCount;
+                                        })
+                                    }
+                                    foundRoom.members.push({member:name,memberCount:count+1})
+                                    foundRoom.save();
+                                    res.redirect("/"+room_id+"-"+name);
+                                });
+                                
+                            }else{
+                                //player found
+                                //then redirect it to index page
+    
+                                res.redirect("/"+room_id+"-"+name);
+                            }
+                        }
+                      });
+                }
+            }
+        });
+        }else{
+            //player wants to create a room
+            //first check room with that name is already present or not
+                //if present show message
+                //else create a new room
+            //then redirect it to index page
+            Room.findOne({room_id:room_id},function(err,foundRoom){
+                if(err){
+                    console.log(err);
+                }else{
+                    if(foundRoom === null){
+                        //no such room present, make one and redirect to next page
+    
+                        const room = new Room({
+                        room_id:room_id,
+                        members:[{member:name,memberCount:1}]
+                            });
+                        room.save();
+                        res.redirect("/"+room_id+"-"+name);
+                    }else{
+                        //room already present, show message
+                        res.render("home",{msg:"room already present"});
+                    }
+                }
+            });
+    
+        }   
+    }
 });
+
 
 app.get("/:room_id-:name",(req,res)=>{
-    var count = 0;
-    var roomCount = 0;
-    room_id = req.params.room_id;
-    nickname = req.params.name;
-    if(isRoomFull){
-        console.log("room full")
-    }else{
-        res.render("index");
-    }
+    res.render("index");
 });
 
-io.on("connection",socket=>{
-    var names = [];
-    var memberCount = 0;
-    socket.join(room_id);
-    roomAndMembers.push({room_id:room_id,id:socket.id,name:nickname,palyerCount:palyerCount});
-    palyerCount++;
-    roomAndMembers.forEach(roomAndMember=>{
-        if(roomAndMember.room_id === room_id){
-            memberCount++;
-            if(memberCount === 3){
-                io.to(room_id).emit("parah",parah.getParah());
-            }
-            names.push(roomAndMember.name)
-        }
-    })
-    if(memberCount === 3){
-        isRoomFull = true;
-    }
-    if(memberCount>3){
-        console.log("room full")
-    }else{
-        io.to(room_id).emit("new member",{
-            names:names,
-            memberCount:memberCount,
-        })
-    }
-    console.log(roomAndMembers);
-    console.log(memberCount);
-    memberCount=0;
-})
-var car1Pos=0;
-var car2Pos=0;
-var car3Pos=0;
-io.on("connection",(socket)=>{
-    socket.on("car1 position",(position)=>{
-         car1Pos=position;
-        console.log("Position of car1: "+position);
-        io.to(room_id).emit("allCarsPos",[car2Pos,car3Pos]);
-    });
-    socket.on("car2 position",(position)=>{
-         car2Pos=position;
-        console.log("Position of car2: "+position);
-        io.to(room_id).emit("allCarsPos",[car1Pos,car3Pos]);
-    });
-    socket.on("car3 position",(position)=>{
-         car3Pos=position;
-        console.log("Position of car3: "+position);
-        io.to(room_id).emit("allCarsPos",[car1Pos,car2Pos]);
-    });
-})
+
 
 
 http.listen(3000,()=>{
     console.log("server started on port 3000")
-})
+});
