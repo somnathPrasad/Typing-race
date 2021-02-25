@@ -147,7 +147,7 @@ io.on("connection", (socket) => {
             roomMembers.push({name:member.member,carNo:member.memberCount})
             noOfMembers++;
         })
-        if(noOfMembers >1){
+        if(noOfMembers >=1){
             io.to(passRoomId).emit("new member",roomMembers);
         }else{
             io.to(passRoomId).emit("first member",{name:passName,room_id:passRoomId,carNo:passCarNo});
