@@ -1,0 +1,19 @@
+exports.getRoom_id = function(){
+    var letters, numbers;
+    letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+    numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+    
+      var rand1 = Math.floor(Math.random() * 10);
+      var rand2 = Math.floor(Math.random() * 10);
+      var rand3 = Math.floor(Math.random() * 10);
+      var rand4 = Math.floor(Math.random() * 10);
+      var rand5 = Math.floor(Math.random() * 10);
+      var rand6 = Math.floor(Math.random() * 10);
+      //                var randCol = [rand1,rand2,rand3,rand4,rand5];
+      //                var i = randGen();
+      var content = letters[rand1]+ letters[rand2]+ numbers[rand3]+ letters[rand4]+ letters[rand5]+ numbers[rand6];
+    
+    var randomRoom_id = content;
+    return randomRoom_id;
+  };
+  

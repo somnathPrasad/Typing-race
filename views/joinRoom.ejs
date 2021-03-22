@@ -11,13 +11,12 @@
 <body style="background-image: url(/images/background.jpg);">
         <div class="container">
             <p id="msg"><%= msg %></p>
-            <form action="/" method="POST">
+            <form action="/joinRoom" method="POST">
+                <p id="msg"><%= msg %></p>
 
-                <!-- <input class="room-id" type="text" name="id" id="room" placeholder="Room Name"/>
+                <input class="room-id" type="text" name="id" id="room" placeholder="Room Id"/>
 
-                <input class="name-box" type="text" name="username" id="name" placeholder="Your Name"/> -->
-
-                <input type="submit" class="room-button" name="createRoom" value="Create Room" id="createBtn">
+                <input class="name-box" type="text" name="username" id="name" placeholder="Your Name"/>
 
                 <input type="submit" class="room-button" name="joinRoom" value="Join Room" id="joinBtn">
 

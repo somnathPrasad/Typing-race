@@ -20,7 +20,6 @@ socket.on("new member",(members)=>{
         isCarNoSet = true;
     }
     var allCars = document.getElementsByClassName("car");
-    console.log(allCars);
     var allnames = document.getElementsByClassName("name");
     for(var x=0;x<allCars.length;x++){
         allCars[x].remove();
@@ -30,8 +29,12 @@ socket.on("new member",(members)=>{
         createCar(members[x].carNo)
         createName(members[x].name,members[x].carNo);
     }
-    console.log(allCars)
 });
+
+socket.on("delete",member=>{
+    var car2 = document.getElementById("car2");
+    console.log(car2);
+})
 
 socket.on("parah",(parah)=>{
     createRandomParah(parah);
