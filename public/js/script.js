@@ -106,7 +106,20 @@ function checkPositions(car,pos){
             positions++;
             console.log(car+" is "+positions)
 
-            // createRanking(positions,car.substing(3,4));
+            if(positions === 1){
+                var winner = document.getElementById("winner");
+                var name = document.getElementById("name"+car.substring(3,4)).innerHTML;
+                winner.innerHTML = name;
+            }else if(positions === 2){
+                var runnerUp = document.getElementById("runnerUp");
+                var name = document.getElementById("name"+car.substring(3,4)).innerHTML;
+                runnerUp.innerHTML = name;
+            }else if(positions > 2){
+                var last = document.getElementById("last");
+                var name = document.getElementById("name"+car.substring(3,4)).innerHTML;
+                last.innerHTML = name;
+            }
+
         }
         previousCar = car;
     }
@@ -115,19 +128,7 @@ function checkPositions(car,pos){
         // createRanking(3,car.substing(3,4));
     }
 
-    if(positions === 1){
-        var winner = document.getElementById("winner");
-        var name = document.getElementById("name"+car.substring(3,4)).innerHTML;
-        winner.innerHTML = name;
-    }else if(positions === 2){
-        var runnerUp = document.getElementById("runnerUp");
-        var name = document.getElementById("name"+car.substring(3,4)).innerHTML;
-        runnerUp.innerHTML = name;
-    }else{
-        var last = document.getElementById("last");
-        var name = document.getElementById("name"+car.substring(3,4)).innerHTML;
-        last.innerHTML = name;
-    }
+    
 
 
 }
