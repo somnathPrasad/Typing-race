@@ -122,6 +122,23 @@ input:focus{
 #name3{
   top: 400px;
 }
+.ranking{
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  display: block;
+  z-index: 20;
+}
+#rank1{
+  top: 200px;
+}
+#rank2{
+  top: 300px;
+}
+#rank3{
+  top: 400px;
+}
 .parah{
   width: 700px;
   margin: auto;

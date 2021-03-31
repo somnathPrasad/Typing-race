@@ -204,8 +204,16 @@ socket.on("car2_pos",pos=>{
 socket.on("car3_pos",pos=>{
     io.to(passRoomId).emit("car3_moved",pos);
 });
-socket.on("car1_finished",msg=>{
-    io.to(passRoomId).emit("")
+
+var positions = 1;
+
+socket.on("finished",car=>{
+    if(positions === 1){
+        io.to(passRoomId).emit("first",car)
+        positions++;
+    }else if(positions === 2){
+        io.to(passRoomId).emit("second",car)
+    }
 })
 
 /////////////////////////////////When a player leaves the game//////////////////////////

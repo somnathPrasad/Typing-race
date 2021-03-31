@@ -9,7 +9,10 @@ var isCarNoSet = false;
 var playerName = "";
 var room_id="";
 var socketCalls = 0;
-var car = ""
+var car = "";
+var positions = 0;
+var isGameRunning = true;
+var previousCar = "";
 
 
    
@@ -76,7 +79,9 @@ function startgame(){
             if(typedLetter === spanLetters[cursorCount].innerHTML){
                 spanLetters[cursorCount].classList.add("done")//changes typedLetter to next letter on correct typing
         }
+        if(isGameRunning){
             moveCar();
+        }
             cursorCount++;
             typedLetter = spanLetters[cursorCount].innerHTML;
         }else if(event.shiftKey === false && event.ctrlKey === false && event.altKey === false) {
@@ -84,62 +89,77 @@ function startgame(){
     }
     })
 }
-function moveOtherCars(position){
 
-    if(carNo===1){
-        position.forEach((pos,index) => {
-            otherCar = document.getElementById("car"+(parseInt(index)+2));
-            otherCar.style.left = pos+'px';
-        });
-    }else if(carNo===2){
-        position.forEach((pos,index) => {
-            if(index === 0){
-                otherCar = document.getElementById("car1");
-                otherCar.style.left = pos+'px';
-            }else{
-                otherCar = document.getElementById("car3");
-                otherCar.style.left = pos+'px';
-            }
-            
-        });
-    }else{
-        position.forEach((pos,index) => {
-            otherCar = document.getElementById("car"+(parseInt(index)+1));
-            otherCar.style.left = pos+'px';
-        });
-    }
-}
 
 //function for moving own car
 function moveCar(){
         car = document.getElementById("car"+carNo);
         car.style.left = parseInt(car.style.left)+9+'px';
         socket.emit("car"+carNo+"_pos",car.style.left);
-        if(car.style.left === 1153){
-            socket.emit("car"+carNo+"_finished","finished")
+        checkPositions("car"+carNo,car.style.left);
+}
+
+function checkPositions(car,pos){
+
+    if(parseInt(pos)>=1130){
+        if(previousCar !== car){
+            positions++;
+            console.log(car+" is "+positions)
+
+            // createRanking(positions,car.substing(3,4));
         }
+        previousCar = car;
+    }
+    if(positions === 2){
+        isGameRunning = false;
+        // createRanking(3,car.substing(3,4));
+    }
+
+    if(positions === 1){
+        var winner = document.getElementById("winner");
+        var name = document.getElementById("name"+car.substring(3,4)).innerHTML;
+        winner.innerHTML = name;
+    }else if(positions === 2){
+        var runnerUp = document.getElementById("runnerUp");
+        var name = document.getElementById("name"+car.substring(3,4)).innerHTML;
+        runnerUp.innerHTML = name;
+    }else{
+        var last = document.getElementById("last");
+        var name = document.getElementById("name"+car.substring(3,4)).innerHTML;
+        last.innerHTML = name;
+    }
+
+
 }
 
 //sockets for moving other cars
 socket.on("car1_moved",pos=>{
     if(carNo !== 1){
         var car1 = document.getElementById("car1");
-        car1.style.left = pos;
+        if(isGameRunning){
+            car1.style.left = pos;
+            checkPositions("car1",pos)
+        }
     }
 });
 socket.on("car2_moved",pos=>{
     if(carNo !== 2){
         var car2 = document.getElementById("car2");
-        car2.style.left = pos;
+        if(isGameRunning){
+            car2.style.left = pos;
+            checkPositions("car2",pos)
+        }
     }
 });
 socket.on("car3_moved",pos=>{
     if(carNo !== 3){
         var car3 = document.getElementById("car3");
-        car3.style.left = pos;
+        if(isGameRunning){
+            car3.style.left = pos;
+            checkPositions("car3",pos)
+        }
     }
 });
-
 
 
 function createCar(carNo){
@@ -157,6 +177,24 @@ function createName(name,carNo){
     newName.style="left:0px";
     newName.id = "name"+carNo;
     raceTrack.appendChild(newName);
+}
+function createRanking(ranking,car){
+    console.log(ranking)
+    console.log(car)
+    var newRanking = document.createElement("p");
+
+    newRanking.classList.add("ranking");
+
+    if(ranking === 1){
+        newRanking.innerHTML = "Winner";
+    }else if(ranking === 2){
+        newRanking.innerHTML = "Runner Up"
+    }else{
+        newRanking.innerHTML = "2nd Runner Up"
+    }
+    newRanking.style="left:800px";
+    newRanking.id = "rank"+car;
+    raceTrack.appendChild(newRanking);
 }
 function createRandomParah(randomParah){
     var letters = randomParah.split("",150);
