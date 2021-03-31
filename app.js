@@ -10,7 +10,7 @@ const { join } = require("path");
 const { count } = require("console");
 const { constants } = require("buffer");
 const parah = require(__dirname+"/RandomParah.ejs");
-const gen_Room_id = require(__dirname+"/RandomRoom_id.ejs");
+const gen_Room_id = require(__dirname+"/randomRoom_id.ejs");
 
 
 app.use(express.static("public"))
