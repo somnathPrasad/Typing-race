@@ -162,13 +162,13 @@ app.get("/:room_id-:name/carno/:carno/isLeader/:isLeader/",(req,res)=>{
     if(req.params.isLeader==="true"){
         //this will create a new object inside main roomAndPlayers array with a new room_id
         roomAndPlayers.push({room_id:req.params.room_id,players:[{name:req.params.name,carNo:carNo,isLeader:isLeader,room_id:req.params.room_id}]});
-        res.render("index",{startButton:"display:block;"});
+        res.render("index",{startButton:"display:block;",room_id:passRoomId});
     }else{
         roomAndPlayers.forEach((room,pos)=>{
             if(room.room_id === passRoomId){
                 //this will push the details of new player inside already created players array
                 roomAndPlayers[pos].players.push({name:req.params.name,carNo:carNo,isLeader:isLeader,room_id:req.params.room_id})
-                res.render("index",{startButton:"display:none;"});
+                res.render("index",{startButton:"display:none;",room_id:passRoomId});
             }
             
         })

@@ -24,13 +24,11 @@
             </form>
         </div>
 
-        <script src="js/home.js"></script>
-        <!-- <script>
-            var socket = io();
-            socket.on("room not found",(msg)=>{
-                var msgElm = document.getElementById("msg");
-                msgElm.innerHTML = msg;
-            })
-        </script> -->
+       <script>
+           if(window.innerWidth<500){
+               alert("Please open in a bigger screen")
+           }
+       </script>
+    
 </body>
 </html>

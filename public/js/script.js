@@ -8,7 +8,6 @@ var carNo = 0;
 var isCarNoSet = false;
 var playerName = "";
 var room_id="";
-var socketCalls = 0;
 var car = "";
 var positions = 0;
 var isGameRunning = true;
@@ -16,15 +15,13 @@ var previousCar = "";
 
 
    
-
-
 //whenever a new member enter the room this is trigirred
 socket.on("new member",(members)=>{
     //raceTrack is the div containing car image and name element.
     //evey time a new member enter the room , raceTrack div is emptied and filled with cars and names again.
         var raceTrack = document.getElementById("raceTrack");
 
-        room_id = members[0].room_id;
+        room_id = members[0].room_id;//assigning roomId to variable in the client
         
         //this will set the car no of each player once and for all
         if(!isCarNoSet){
@@ -33,8 +30,9 @@ socket.on("new member",(members)=>{
             isCarNoSet = true;
         }
 
-        raceTrack.innerHTML = "";
+        raceTrack.innerHTML = "";//deleting every car and name present inside raceTrack
         
+        //refilling raceTrack with all the cars and names.
         for(var x=0;x<members.length;x++){
             createCar(members[x].carNo)
             createName(members[x].name,members[x].carNo);
@@ -64,6 +62,8 @@ socket.on("parah",(parah)=>{
 })
 
 function startgame(){
+
+    //interval and timeout to show the cursor effect
     setInterval(() => {
         spanLetters[cursorCount].classList.add("typing");
         setTimeout(() => {
@@ -73,6 +73,9 @@ function startgame(){
 
     
 
+    //every time a key is pressed it checks if the key pressed is in the array spanLetters in the position where cursor is 
+    //if the key pressed is correct moveCar() function is trigrred and car is moved and cursor is passed to next letter.
+    //else the letter is colored in red.
     document.addEventListener("keydown",(event)=>{
         if(event.key === typedLetter){  
             spanLetters[cursorCount].classList.remove("typing")
@@ -96,6 +99,7 @@ function moveCar(){
         car = document.getElementById("car"+carNo);
         car.style.left = parseInt(car.style.left)+9+'px';
         socket.emit("car"+carNo+"_pos",car.style.left);
+
         checkPositions("car"+carNo,car.style.left);
 }
 
@@ -218,3 +222,4 @@ startBtn.addEventListener("click",()=>{
 window.addEventListener("beforeunload",function(e){
   socket.emit("leaving",{name:playerName,room_id:room_id,carNo:carNo}) 
 });
+
