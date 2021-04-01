@@ -170,7 +170,8 @@ socket.on("car3_moved",pos=>{
 function createCar(carNo){
     var newCar = document.createElement("img");
     newCar.classList.add("car");
-    newCar.src = "/images/car1.png";
+    newCar.classList.add("shadow");
+    newCar.src = "/images/plane"+carNo+".png";
     newCar.style = "left:100px"
     newCar.id = "car"+carNo;
     raceTrack.appendChild(newCar);
@@ -178,6 +179,7 @@ function createCar(carNo){
 function createName(name,carNo){
     var newName = document.createElement("p");
     newName.classList.add("name");
+    newName.classList.add("arcade-font");
     newName.innerHTML = name;
     newName.style="left:0px";
     newName.id = "name"+carNo;
