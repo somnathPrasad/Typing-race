@@ -6,11 +6,25 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Oi&family=Press+Start+2P&family=Reggae+One&family=Train+One&family=Yatra+One&family=Zilla+Slab+Highlight&display=swap" rel="stylesheet">
+
+
     <title>Typing Race</title>
 </head>
-<body style="background-image: url(/images/background.jpg);">
+
+
+<body>
+    <div class="container show one"></div>
+    <div class="container show two"></div>
+    <div class="container show three"></div>
+    <div class="container show four"></div>
+    <div class="container show five"></div>
         <div class="container">
-            <p id="msg"><%= msg %></p>
+            <div id="heading"></div>
+            
+            
             <form action="/createRoom" method="POST">
                 <p id="room_id"><%= room_id %></p>
                 <p id="msg"><%= msg %></p>
@@ -19,18 +33,11 @@
 
                 <input type="submit" class="room-button" name="createRoom" value="Create & Join" id="createBtn">
 
-                <!-- <input type="submit" class="room-button" name="joinRoom" value="Join Room" id="joinBtn"> -->
 
             </form>
         </div>
 
         <script src="js/home.js"></script>
-        <!-- <script>
-            var socket = io();
-            socket.on("room not found",(msg)=>{
-                var msgElm = document.getElementById("msg");
-                msgElm.innerHTML = msg;
-            })
-        </script> -->
+        <script src="/js/heading.js"></script>
 </body>
 </html>

@@ -29,7 +29,7 @@ body{
 input{
   font-size: 1rem;
   font-weight: bold;
-  color: #ad7f7f;
+  color: #003380;
   font-family: 'Press Start 2P', cursive;
   display: block;
   margin-bottom: 15px;
@@ -46,25 +46,28 @@ input{
 }
 input, input[placeholder] {
   text-align: center;
+  color: #003380;
 }
 input:focus{
-  font-size: x-large;
+  color: #003380;
 }
 #msg {
   font-family: 'Montserrat', sans-serif;
   color: red;
   font-weight:100;
   position: absolute;
-  left: 200px;
-  top: 100px;
+  top: 90%;
+  left: 60%;
+  transform: translate(-90%, -60%);
 }
 #room_id {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Press Start 2P', cursive;
   color: red;
   font-weight: bold;
   position: absolute;
-  left: 200px;
-  top: 50px;
+  top: 80%;
+  left: 60%;
+  transform: translate(-80%, -60%);
 }
 .room-button{
   width: 17em;
@@ -125,7 +128,7 @@ input:focus{
 #name3{
   top: 400px;
 }
-.room-id{
+/* .room-id{
   font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;
   font-weight: bold;
@@ -133,7 +136,7 @@ input:focus{
   position: absolute;
   top: 10px;
   right: 10px;
-}
+} */
 .ranking{
   font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;
@@ -225,7 +228,8 @@ input:focus{
 }
 
 #heading{
-  padding-top: 20px;
+  padding-top: 0px;
+  padding-bottom: 30px;
   /* font-family: 'Montserrat', sans-serif; */
   /* font-family: 'Indie Flower', cursive; */
   /* font-family: 'Oi', cursive; */
