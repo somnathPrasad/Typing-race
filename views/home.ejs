@@ -6,28 +6,54 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Oi&family=Press+Start+2P&family=Reggae+One&family=Train+One&family=Yatra+One&family=Zilla+Slab+Highlight&display=swap" rel="stylesheet">
     <title>Typing Race</title>
 </head>
-<body style="background-image: url(/images/background.jpg);">
-        <div class="container">
-            <p id="msg"><%= msg %></p>
-            <form action="/" method="POST">
+<body>
 
-                <!-- <input class="room-id" type="text" name="id" id="room" placeholder="Room Name"/>
+    <div class="container">
+        <div id="heading"></div>
+        <p id="msg"><%= msg %></p>
+        <form action="/" method="POST">
 
-                <input class="name-box" type="text" name="username" id="name" placeholder="Your Name"/> -->
+            <input type="submit" class="room-button" name="createRoom" value="Create Room" id="createBtn">
 
-                <input type="submit" class="room-button" name="createRoom" value="Create Room" id="createBtn">
+            <input type="submit" class="room-button" name="joinRoom" value="Join Room" id="joinBtn">
 
-                <input type="submit" class="room-button" name="joinRoom" value="Join Room" id="joinBtn">
-
-            </form>
-        </div>
+        </form>
+    </div>
 
        <script>
            if(window.innerWidth<500){
                alert("Please open in a bigger screen")
            }
+
+           var heading = document.getElementById("heading");
+    var title = "Typing Race"
+    var first = 0;
+    var second= 1;
+
+    setInterval(() => {
+        createHeadingLetters()
+        if(first === 10){
+            setTimeout(() => {
+            first = 0;
+            second= 1;
+            heading.innerHTML = "";
+            }, 3000);
+        }
+    }, 200);
+
+    function createHeadingLetters(){
+        var newLetter = document.createElement("span");
+        newLetter.innerHTML = title.substring(first,second);
+        newLetter.classList.add("bold")
+        heading.appendChild(newLetter);
+        first++;
+        second++;
+    }
+    
        </script>
     
 </body>

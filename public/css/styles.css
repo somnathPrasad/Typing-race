@@ -8,15 +8,17 @@
   box-sizing: border-box;
 }
 body{
-  background-color: #6cdbeb 
+  background-color: #fff700;
 }
 .container{
-  margin: auto;
-  margin-top: 50px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   box-sizing: border-box;
   background-color:rgb(255, 255, 255,.15);
   backdrop-filter: blur(5px);
-  width: 500px;
+  width: 700px;
   height: 500px;
   border-radius: 5px;
   display: flex;
@@ -28,7 +30,7 @@ input{
   font-size: x-large;
   font-weight: bold;
   color: #ad7f7f;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Press Start 2P', cursive;
   display: block;
   margin-bottom: 15px;
   height: 100px;
@@ -39,7 +41,7 @@ input{
   border-top-right-radius: 50px;
   outline: none;
   border: none;
-  background-color:rgb(255, 255, 255,.15);
+  background-color:rgb(2, 241, 245,.15);
   backdrop-filter: blur(5px);
 }
 input, input[placeholder] {
@@ -69,6 +71,7 @@ input:focus{
   height: 100px;
   display: block;
   font-size: x-large;
+  font-family: 'Press Start 2P', cursive;
   font-weight: 500;
 }
 .room-button:hover{
@@ -219,4 +222,27 @@ input:focus{
   .container{
     display: none;
   }
+}
+
+#heading{
+  padding-top: 20px;
+  /* font-family: 'Montserrat', sans-serif; */
+  /* font-family: 'Indie Flower', cursive; */
+  /* font-family: 'Oi', cursive; */
+  font-family: 'Press Start 2P', cursive;
+  /* font-family: 'Reggae One', cursive; */
+  /* font-family: 'Train One', cursive; */
+  /* font-family: 'Yatra One', cursive; */
+  /* font-family: 'Zilla Slab Highlight', cursive; */
+  font-size:xx-large;
+  text-align: center;
+  position: absolute;
+  top: 10%;
+  left: 30%;
+  transform: translate(-10%, -30%);
+}
+
+.bold{
+  font-weight:bold;
+  color: #003380;
 }
