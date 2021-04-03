@@ -78,7 +78,11 @@ app.post("/createRoom",(req,res)=>{
         message = "Type Your Name"
         res.redirect("/createRoom");
     }else{
-        //if name box is not empty
+        if(req.body.username.length>4){
+            message = "Name should be max 4 chacters long"
+            res.redirect("/createRoom");
+        }else{
+         //if name box is not empty
         Room.findOne({room_id:generatedRoom_id},function(err,foundRoom){
             if(foundRoom !== null){
                 //room if already present with that id
@@ -95,7 +99,8 @@ app.post("/createRoom",(req,res)=>{
 
                     res.redirect("/"+generatedRoom_id+"-"+req.body.username+"/carno/"+"1"+"/isLeader/"+"true/");
             }
-        });
+        });   
+        }
     }
 
 });
@@ -111,37 +116,43 @@ app.post("/joinRoom",(req,res)=>{
         message="Please fill everything!"
         res.redirect("/joinRoom");
     }else{
-        // check if room is present or not
-        Room.findOne({room_id:req.body.id},function(err,foundRoom){
-            if(foundRoom !== null){
-                // console.log(foundRoom)
-                // room is present
-                // join player into index
-                var memberCount = 0 //to count the number of members already present in room
-    
-                foundRoom.members.forEach(member => {
-                    memberCount++;
-                });
+        if(req.body.username>4){
 
-                if(memberCount === 3){
-                    // check if the room is full or not
-                    message="Room full"
-                    res.redirect("joinRoom");
-                }else{
-                    // room not full 
-                    // push new member into db and redirect to index
-                    foundRoom.members.push({member:req.body.username,memberCount:memberCount+1,isLeader:false})
-                    foundRoom.save();
-                    memberCount++;
-                    res.redirect("/"+req.body.id+"-"+req.body.username+"/carno/"+memberCount+"/isLeader/"+"false/");
-                }
-                
-            }else{
-                //room not present
-                message="Room not present"
-                res.redirect("/joinRoom");
-            }
+            // check if room is present or not
+Room.findOne({room_id:req.body.id},function(err,foundRoom){
+    if(foundRoom !== null){
+        // console.log(foundRoom)
+        // room is present
+        // join player into index
+        var memberCount = 0 //to count the number of members already present in room
+
+        foundRoom.members.forEach(member => {
+            memberCount++;
         });
+
+        if(memberCount === 3){
+            // check if the room is full or not
+            message="Room full"
+            res.redirect("joinRoom");
+        }else{
+            // room not full 
+            // push new member into db and redirect to index
+            foundRoom.members.push({member:req.body.username,memberCount:memberCount+1,isLeader:false})
+            foundRoom.save();
+            memberCount++;
+            res.redirect("/"+req.body.id+"-"+req.body.username+"/carno/"+memberCount+"/isLeader/"+"false/");
+        }
+        
+    }else{
+        //room not present
+        message="Room not present"
+        res.redirect("/joinRoom");
+    }
+}); 
+        }else{
+            message="Name should be max 4 chacters long"
+            res.redirect("/joinRoom");
+        }
     }
 });
 
