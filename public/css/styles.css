@@ -305,3 +305,7 @@ input:-internal-autofill-selected{
 .shadow{
   box-shadow: 0px 40px 50px 0px rgba(0, 0, 0, 0.3);
 }
+.car{
+  width: 10em;
+  height: 6em;
+}

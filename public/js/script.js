@@ -12,6 +12,7 @@ var car = "";
 var positions = 0;
 var isGameRunning = true;
 var previousCar = "";
+var isCarReached = false;
 
 
    
@@ -83,7 +84,9 @@ function startgame(){
                 spanLetters[cursorCount].classList.add("done")//changes typedLetter to next letter on correct typing
         }
         if(isGameRunning){
-            moveCar();
+            if(!isCarReached){
+                moveCar();   
+            }
         }
             cursorCount++;
             typedLetter = spanLetters[cursorCount].innerHTML;
@@ -97,15 +100,18 @@ function startgame(){
 //function for moving own car
 function moveCar(){
         car = document.getElementById("car"+carNo);
-        car.style.left = parseInt(car.style.left)+9+'px';
-        socket.emit("car"+carNo+"_pos",car.style.left);
-
-        checkPositions("car"+carNo,car.style.left);
+        if(parseInt(car.style.left)<1009){
+            car.style.left = parseInt(car.style.left)+9+'px';
+            socket.emit("car"+carNo+"_pos",car.style.left);
+    
+            checkPositions("car"+carNo,car.style.left);
+        }
 }
 
 function checkPositions(car,pos){
 
     if(parseInt(pos)>=1000){
+        //previous car variable is added to stop the position increment every time the same car trigerrs it
         if(previousCar !== car){
             positions++;
             console.log(car+" is "+positions)
