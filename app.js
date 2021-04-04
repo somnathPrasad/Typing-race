@@ -116,8 +116,7 @@ app.post("/joinRoom",(req,res)=>{
         message="Please fill everything!"
         res.redirect("/joinRoom");
     }else{
-        if(req.body.username>4){
-
+        if(req.body.username.length<5){
             // check if room is present or not
 Room.findOne({room_id:req.body.id},function(err,foundRoom){
     if(foundRoom !== null){

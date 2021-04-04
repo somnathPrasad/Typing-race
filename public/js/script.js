@@ -105,7 +105,7 @@ function moveCar(){
 
 function checkPositions(car,pos){
 
-    if(parseInt(pos)>=1130){
+    if(parseInt(pos)>=1000){
         if(previousCar !== car){
             positions++;
             console.log(car+" is "+positions)
