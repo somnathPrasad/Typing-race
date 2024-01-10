@@ -17,6 +17,8 @@ app.use(express.static("public"))
 app.set("view engine","ejs")
 app.use(bodyParser.urlencoded({extended:true}));
 
+// "mongodb+srv://admin-somnath:hn8qM0QtxRoeZlkN@cluster0.vc3ep.mongodb.net/typingPracticeDB?retryWrites=true&w=majority"
+// "mongodb://127.0.0.1:27017/typing_race"
 mongoose.connect("mongodb+srv://admin-somnath:hn8qM0QtxRoeZlkN@cluster0.vc3ep.mongodb.net/typingPracticeDB?retryWrites=true&w=majority", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -232,7 +234,7 @@ socket.on("finished",car=>{
         //called when a player leaves the page
     socket.on("leaving",(playerDetails)=>{
         io.to(passRoomId).emit("player left",playerDetails);
-        console.log ("left: "+playerDetails.room_id+" "+playerDetails.name);
+        // console.log ("left: "+playerDetails.room_id+" "+playerDetails.name);
 
         roomAndPlayers.forEach((room,pos1)=>{
             if(room.room_id === playerDetails.room_id){
@@ -242,7 +244,7 @@ socket.on("finished",car=>{
                     //this will delete the whole room
                     roomAndPlayers.splice(pos1,1); //delete from server
                     Room.findOneAndDelete({room_id:playerDetails.room_id},function(err,deletedRoom){
-                        console.log(deletedRoom);
+                        // console.log(deletedRoom);
                     }) //delete from db.
                 }else{
                     //this will delete the player who has left
@@ -280,5 +282,5 @@ if (port == null || port == "") {
 // app.listen(port);
 
 http.listen(port,()=>{
-    console.log("server started on successfully")
+    console.log(`Server running on ${port}`)
 });
